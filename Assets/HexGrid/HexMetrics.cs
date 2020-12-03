@@ -23,6 +23,8 @@ public static class HexMetrics
 
     public const float noiseScale = 0.003f;
 
+    public const float elevationPerturbStrength = 1.5f;
+
     public static Texture2D noiseSource;
 
     public static Vector3[] corners =
@@ -35,6 +37,7 @@ public static class HexMetrics
         new Vector3(-innerRadius, 0f, 0.5f * outerRadius),
         new Vector3(0f, 0f, outerRadius)
     };
+    
 
     public static Vector4 SampleNoise(Vector3 position)
     {

@@ -25,6 +25,9 @@ public static class HexMetrics
 
     public const float elevationPerturbStrength = 1.5f;
 
+    public const int chunkSizeX = 5;
+    public const int chunkSizeZ = 5;
+
     public static Texture2D noiseSource;
 
     public static Vector3[] corners =

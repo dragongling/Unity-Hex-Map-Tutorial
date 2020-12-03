@@ -62,13 +62,12 @@ public class HexMapEditor : MonoBehaviour
     {
         if(toolSelected == Tool.Brush)
         {
-            cell.color = activeColor;
+            cell.Color = activeColor;
         }
         if(toolSelected == Tool.Elevation)
         {
             cell.Elevation = activeElevation;
         }        
-        hexGrid.Refresh();
     }
 
 }

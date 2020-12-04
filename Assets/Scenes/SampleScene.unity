@@ -1246,6 +1246,8 @@ MonoBehaviour:
   stickMaxZoom: -45
   swivelMinZoom: 90
   swivelMaxZoom: 45
+  moveSpeedMinZoom: 400
+  moveSpeedMaxZoom: 100
 --- !u!4 &726098618
 Transform:
   m_ObjectHideFlags: 0

@@ -1223,6 +1223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 726098618}
   - component: {fileID: 726098617}
+  - component: {fileID: 726098619}
   m_Layer: 0
   m_Name: Top Down Camera
   m_TagString: Untagged
@@ -1242,12 +1243,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dd025134a94c9d4180c24c0c63a245e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grid: {fileID: 1423730788}
   stickMinZoom: -250
   stickMaxZoom: -45
   swivelMinZoom: 90
   swivelMaxZoom: 45
   moveSpeedMinZoom: 400
   moveSpeedMaxZoom: 100
+  minX: 0
+  maxX: 0
+  minZ: 0
+  maxZ: 0
 --- !u!4 &726098618
 Transform:
   m_ObjectHideFlags: 0
@@ -1263,6 +1269,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &726098619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 726098616}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7204ceea2f1b554a977be91d20e7201, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hexGrid: {fileID: 1423730788}
 --- !u!1 &795254055
 GameObject:
   m_ObjectHideFlags: 0
@@ -1651,7 +1670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_FirstSelected: {fileID: 0}
-  m_sendNavigationEvents: 1
+  m_sendNavigationEvents: 0
   m_DragThreshold: 10
 --- !u!4 &1274027451
 Transform:

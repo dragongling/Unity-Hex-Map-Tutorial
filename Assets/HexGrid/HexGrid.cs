@@ -17,6 +17,30 @@ public class HexGrid : MonoBehaviour
     public Texture2D noiseSource;
     public HexGridChunk chunkPrefab;
 
+    public float LeftmostCellPosition {
+        get {
+            return transform.position.x;
+        }
+    }
+
+    public float BottommostCellPosition {
+        get {
+            return transform.position.z;
+        }
+    }
+
+    public float RightmostCellPosition {
+        get {
+            return LeftmostCellPosition + (chunkCountX * HexMetrics.chunkSizeX - 0.5f) * (2f * HexMetrics.innerRadius);
+        }
+    }
+
+    public float TopmostCellPosition {
+        get {
+            return BottommostCellPosition + (chunkCountZ * HexMetrics.chunkSizeZ - 1f) * (1.5f * HexMetrics.outerRadius);
+        }
+    }
+
     HexCell[] cells;
     HexGridChunk[] chunks;
 

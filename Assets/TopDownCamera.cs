@@ -10,6 +10,7 @@ public class TopDownCamera : MonoBehaviour
     public float stickMinZoom, stickMaxZoom;
     public float swivelMinZoom, swivelMaxZoom;
     public float moveSpeedMinZoom, moveSpeedMaxZoom;
+    public float minX, maxX, minZ, maxZ;
 
     float zoom = 1f;
 
@@ -43,7 +44,14 @@ public class TopDownCamera : MonoBehaviour
 
         Vector3 position = transform.localPosition;
         position += direction * distance;
-        transform.localPosition = position;
+        transform.localPosition = ClampPosition(position);
+    }
+
+    private Vector3 ClampPosition(Vector3 position)
+    {
+        position.x = Mathf.Clamp(position.x, minX, maxX);
+        position.z = Mathf.Clamp(position.z, minZ, maxZ);
+        return position;
     }
 
     private void AdjustZoom(float delta)

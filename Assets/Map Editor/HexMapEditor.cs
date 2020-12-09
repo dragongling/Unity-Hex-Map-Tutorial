@@ -60,14 +60,16 @@ public class HexMapEditor : MonoBehaviour
 
     private void EditCell(HexCell cell)
     {
-        if(toolSelected == Tool.Brush)
+        if (cell)
         {
-            cell.Color = activeColor;
+            if (toolSelected == Tool.Brush)
+            {
+                cell.Color = activeColor;
+            }
+            if (toolSelected == Tool.Elevation)
+            {
+                cell.Elevation = activeElevation;
+            }
         }
-        if(toolSelected == Tool.Elevation)
-        {
-            cell.Elevation = activeElevation;
-        }        
     }
-
 }

@@ -1243,13 +1243,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dd025134a94c9d4180c24c0c63a245e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grid: {fileID: 1423730788}
   stickMinZoom: -250
   stickMaxZoom: -45
   swivelMinZoom: 90
   swivelMaxZoom: 45
   moveSpeedMinZoom: 400
   moveSpeedMaxZoom: 100
+  rotationSpeed: 180
   minX: 0
   maxX: 0
   minZ: 0

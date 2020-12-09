@@ -85,6 +85,11 @@ public class HexMapEditor : MonoBehaviour
         }
     }
 
+    public void ShowUI(bool visible)
+    {
+        hexGrid.ShowUI(visible);
+    }
+
     private void EditCell(HexCell cell)
     {
         if (cell)

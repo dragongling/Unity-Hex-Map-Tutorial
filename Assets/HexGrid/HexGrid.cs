@@ -57,6 +57,14 @@ public class HexGrid : MonoBehaviour
         CreateCells();
     }
 
+    public void ShowUI(bool visible)
+    {
+        for (int i = 0; i < chunks.Length; i++)
+        {
+            chunks[i].ShowUI(visible);
+        }
+    }
+
     private void CreateChunks()
     {
         chunks = new HexGridChunk[chunkCountX * chunkCountZ];

@@ -50,15 +50,17 @@ public class HexMapEditor : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            HandleInput();
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                HandleInput();
+            }
         }
     }
 
     private void HandleInput()
     {
         Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(inputRay, out hit))
+        if (Physics.Raycast(inputRay, out RaycastHit hit))
         {
             EditCells(hexGrid.GetCell(hit.point));
         }

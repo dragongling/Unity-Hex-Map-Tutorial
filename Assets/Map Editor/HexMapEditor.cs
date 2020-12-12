@@ -14,13 +14,14 @@ public class HexMapEditor : MonoBehaviour
     int brushSize;
 
     public GameObject selectionPlane;
+    public HexSelector hexSelector;
 
     public enum Tool { Brush, Elevation }
 
     private void Awake()
     {
         SelectColor(0);
-        toolSelected = Tool.Brush;
+        toolSelected = Tool.Brush;        
     }
 
     public void SetBrushSize(float newSize)
@@ -50,37 +51,30 @@ public class HexMapEditor : MonoBehaviour
 
     private void Update()
     {
-        /*if (Input.GetMouseButton(0))
-        {
-            if (!EventSystem.current.IsPointerOverGameObject())
-            {
-                HandleInput();
-            }
-        }*/
         if (!EventSystem.current.IsPointerOverGameObject())
         {
             Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(inputRay, out RaycastHit hit))
             {
-                Debug.Log(hit.collider.name);
                 HexCell cell = hexGrid.GetCell(hit.point);
                 if (cell)
                 {
-                    selectionPlane.SetActive(true);
-                    Vector3 pos = cell.Position;
-                    pos.y = cell.Elevation + 1f;
-                    selectionPlane.transform.position = pos;
+                    hexSelector.Select(cell);
                     if (Input.GetMouseButton(0))
                     {
                         EditCells(cell);
                     }
+                }
+                else
+                {
+                    hexSelector.ClearSelection();
                 }
                 
             }
         }
         else
         {
-            selectionPlane.SetActive(false);
+            hexSelector.ClearSelection();
         }
     }
 

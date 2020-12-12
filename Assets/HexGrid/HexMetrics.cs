@@ -29,6 +29,9 @@ public static class HexMetrics
     public const int chunkSizeX = 5;
     public const int chunkSizeZ = 5;
 
+
+    public const float selectionHeight = 1f;
+
     public static Texture2D noiseSource;
 
     public static Vector3[] corners =

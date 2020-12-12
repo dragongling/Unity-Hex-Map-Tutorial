@@ -24,10 +24,13 @@ public class TopDownCamera : MonoBehaviour
 
     private void Update()
     {
-        float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
-        if(zoomDelta != 0f)
+        if (Input.GetKey(KeyCode.LeftControl))
         {
-            AdjustZoom(zoomDelta);
+            float zoomDelta = Input.GetAxis("Mouse ScrollWheel");
+            if (zoomDelta != 0f)
+            {
+                AdjustZoom(zoomDelta);
+            }
         }
 
         float rotationDelta = Input.GetAxis("Rotation");

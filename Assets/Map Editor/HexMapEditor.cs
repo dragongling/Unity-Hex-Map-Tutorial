@@ -51,6 +51,19 @@ public class HexMapEditor : MonoBehaviour
 
     private void Update()
     {
+        if (!Input.GetKey(KeyCode.LeftControl))
+        {
+            float wheelDelta = Input.GetAxis("Mouse ScrollWheel");
+            if (wheelDelta > 0f)
+            {
+                brushSize++;
+            }
+            else if(wheelDelta < 0f && brushSize > 0)
+            {
+                brushSize--;
+            }
+        }
+
         if (!EventSystem.current.IsPointerOverGameObject())
         {
             Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);

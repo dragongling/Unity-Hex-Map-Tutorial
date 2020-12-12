@@ -89,14 +89,18 @@ public class HexMapEditor : MonoBehaviour
         {
             for (int x = centerX - r; x <= centerX + radius; x++)
             {
-                result.Add(hexGrid.GetCell(new HexCoordinates(x, z)));
+                HexCell cell = hexGrid.GetCell(new HexCoordinates(x, z));
+                if(cell)
+                    result.Add(cell);
             }
         }
         for (int r = 0, z = centerZ + radius; z > centerZ; z--, r++)
         {
             for (int x = centerX - radius; x <= centerX + r; x++)
             {
-                result.Add(hexGrid.GetCell(new HexCoordinates(x, z)));
+                HexCell cell = hexGrid.GetCell(new HexCoordinates(x, z));
+                if (cell)
+                    result.Add(cell);
             }
         }
         return result;

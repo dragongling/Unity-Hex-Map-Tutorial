@@ -56,13 +56,14 @@ public class HexMapEditor : MonoBehaviour
             Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(inputRay, out RaycastHit hit))
             {
-                HexCell cell = hexGrid.GetCell(hit.point);
-                if (cell)
+                HexCell centerCell = hexGrid.GetCell(hit.point);
+                List<HexCell> affectedCells = GetCellsAround(centerCell, brushSize);
+                if (centerCell)
                 {
-                    hexSelector.Select(cell);
+                    hexSelector.Select(affectedCells);
                     if (Input.GetMouseButton(0))
                     {
-                        EditCells(cell);
+                        EditCells(affectedCells);
                     }
                 }
                 else
@@ -78,13 +79,27 @@ public class HexMapEditor : MonoBehaviour
         }
     }
 
-    private void HandleInput()
+    List<HexCell> GetCellsAround(HexCell center, int radius)
     {
-        Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(inputRay, out RaycastHit hit))
+        List<HexCell> result = new List<HexCell> { center };
+        int centerX = center.coordinates.X;
+        int centerZ = center.coordinates.Z;
+
+        for (int r = 0, z = centerZ - radius; z <= centerZ; z++, r++)
         {
-            EditCells(hexGrid.GetCell(hit.point));
+            for (int x = centerX - r; x <= centerX + radius; x++)
+            {
+                result.Add(hexGrid.GetCell(new HexCoordinates(x, z)));
+            }
         }
+        for (int r = 0, z = centerZ + radius; z > centerZ; z--, r++)
+        {
+            for (int x = centerX - radius; x <= centerX + r; x++)
+            {
+                result.Add(hexGrid.GetCell(new HexCoordinates(x, z)));
+            }
+        }
+        return result;
     }
 
     void EditCells(HexCell center)
@@ -111,6 +126,12 @@ public class HexMapEditor : MonoBehaviour
     public void ShowUI(bool visible)
     {
         hexGrid.ShowUI(visible);
+    }
+
+    void EditCells(ICollection<HexCell> cells)
+    {
+        foreach (HexCell cell in cells)
+            EditCell(cell);
     }
 
     private void EditCell(HexCell cell)

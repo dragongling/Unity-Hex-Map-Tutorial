@@ -39,4 +39,9 @@ public class HexSelector : MonoBehaviour
         selectedCells.Remove(cell);
         mesh.Triangulate(selectedCells.ToArray());
     }
+
+    public void Select(List<HexCell> selectedCells)
+    {
+        mesh.Triangulate(selectedCells.ToArray());
+    }
 }

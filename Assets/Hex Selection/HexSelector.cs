@@ -14,6 +14,14 @@ public class HexSelector : MonoBehaviour
         selectedCells = new List<HexCell>();
     }
 
+    public Color BorderColor { 
+        set {
+            Color.RGBToHSV(value, out float h, out float s, out float v);
+            v = 1.0f;
+            mesh.GetComponent<MeshRenderer>().material.color = Color.HSVToRGB(h, s, v);
+        }
+    }
+
     public void ClearSelection()
     {
         selectedCells.Clear();

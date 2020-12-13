@@ -32,16 +32,20 @@ public class HexMapEditor : MonoBehaviour
     public void SelectBrushTool()
     {
         toolSelected = Tool.Brush;
+        hexSelector.BorderColor = activeColor;
     }
 
     public void SelectElevationTool()
     {
         toolSelected = Tool.Elevation;
+        hexSelector.BorderColor = Color.white;
     }
 
     public void SelectColor(int index)
     {
         activeColor = colors[index];
+        if(toolSelected == Tool.Brush)
+            hexSelector.BorderColor = activeColor;
     }
 
     public void SetElevation(float newElevation)

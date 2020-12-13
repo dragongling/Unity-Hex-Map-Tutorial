@@ -6,7 +6,7 @@ using UnityEngine;
 public class HexSelectionMesh : MonoBehaviour
 {
     Mesh hexMesh;
-    public Color selectionBorderColor;
+    public Color selectionBorderAlbedoColor;
 
     static List<Vector3> vertices = new List<Vector3>();
     static List<int> triangles = new List<int>();
@@ -46,7 +46,7 @@ public class HexSelectionMesh : MonoBehaviour
             Vector3 vCloseLeft = center + HexMetrics.GetFirstCorner(direction) * 0.9f;
             Vector3 vCloseRight = center + HexMetrics.GetSecondCorner(direction) * 0.9f;
             AddQuad(vCloseLeft, vCloseRight, vFarLeft, vFarRight);
-            AddQuadColor(selectionBorderColor, selectionBorderColor, selectionBorderColor, selectionBorderColor);
+            AddQuadColor(selectionBorderAlbedoColor, selectionBorderAlbedoColor, selectionBorderAlbedoColor, selectionBorderAlbedoColor);
         }
     }
 

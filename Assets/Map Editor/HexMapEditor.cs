@@ -16,7 +16,7 @@ public class HexMapEditor : MonoBehaviour
     public GameObject selectionPlane;
     public HexSelector hexSelector;
 
-    public enum Tool { Brush, Elevation }
+    public enum Tool { Brush, Elevation, River }
 
     private void Awake()
     {
@@ -38,6 +38,12 @@ public class HexMapEditor : MonoBehaviour
     public void SelectElevationTool()
     {
         toolSelected = Tool.Elevation;
+        hexSelector.BorderColor = Color.white;
+    }
+
+    public void SelectRiverTool()
+    {
+        toolSelected = Tool.River;
         hexSelector.BorderColor = Color.white;
     }
 

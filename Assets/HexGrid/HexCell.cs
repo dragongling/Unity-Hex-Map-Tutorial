@@ -63,6 +63,12 @@ public class HexCell : MonoBehaviour
         }
     }
 
+    public float StreamBedY {
+        get {
+            return (elevation + HexMetrics.streamBedElevationOffset) * HexMetrics.elevationStep;
+        }
+    }
+
     public Vector3 Position {
         get {
             return transform.localPosition;
@@ -144,7 +150,7 @@ public class HexCell : MonoBehaviour
         }        
     }
 
-    public bool HasRiverThroughTheEdge(HexDirection direction)
+    public bool HasRiverThroughEdge(HexDirection direction)
     {
         return
             hasIncomingRiver && incomingRiver == direction ||

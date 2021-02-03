@@ -32,6 +32,8 @@ public static class HexMetrics
 
     public const float selectionHeight = 1f;
 
+    public const float streamBedElevationOffset = -1f;
+
     public static Texture2D noiseSource;
 
     public static Vector3[] corners =

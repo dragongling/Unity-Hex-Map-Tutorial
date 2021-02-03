@@ -17,6 +17,7 @@ public class HexMapEditor : MonoBehaviour
     public HexSelector hexSelector;
 
     public enum Tool { Brush, Elevation, River }
+    bool brushSizeEnabled = true;
 
     private void Awake()
     {
@@ -26,25 +27,32 @@ public class HexMapEditor : MonoBehaviour
 
     public void SetBrushSize(float newSize)
     {
-        brushSize = (int)newSize;
+        if (brushSizeEnabled)
+        {
+            brushSize = (int)newSize;
+        }
     }
 
     public void SelectBrushTool()
     {
         toolSelected = Tool.Brush;
         hexSelector.BorderColor = activeColor;
+        brushSizeEnabled = true;
     }
 
     public void SelectElevationTool()
     {
         toolSelected = Tool.Elevation;
         hexSelector.BorderColor = Color.white;
+        brushSizeEnabled = true;
     }
 
     public void SelectRiverTool()
     {
         toolSelected = Tool.River;
         hexSelector.BorderColor = Color.white;
+        brushSizeEnabled = false;
+        brushSize = 0;
     }
 
     public void SelectColor(int index)
@@ -61,18 +69,7 @@ public class HexMapEditor : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            float wheelDelta = Input.GetAxis("Mouse ScrollWheel");
-            if (wheelDelta > 0f)
-            {
-                brushSize++;
-            }
-            else if(wheelDelta < 0f && brushSize > 0)
-            {
-                brushSize--;
-            }
-        }
+        AdjustBrushSize();
 
         if (!EventSystem.current.IsPointerOverGameObject())
         {
@@ -99,6 +96,22 @@ public class HexMapEditor : MonoBehaviour
         else
         {
             hexSelector.ClearSelection();
+        }
+    }
+
+    private void AdjustBrushSize()
+    {
+        if (brushSizeEnabled && Input.GetKey(KeyCode.LeftControl))
+        {
+            float wheelDelta = Input.GetAxis("Mouse ScrollWheel");
+            if (wheelDelta > 0f)
+            {
+                brushSize++;
+            }
+            else if (wheelDelta < 0f && brushSize > 0)
+            {
+                brushSize--;
+            }
         }
     }
 

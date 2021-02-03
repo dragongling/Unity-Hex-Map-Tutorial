@@ -61,7 +61,7 @@ public class HexMapEditor : MonoBehaviour
 
     private void Update()
     {
-        if (!Input.GetKey(KeyCode.LeftControl))
+        if (Input.GetKey(KeyCode.LeftControl))
         {
             float wheelDelta = Input.GetAxis("Mouse ScrollWheel");
             if (wheelDelta > 0f)

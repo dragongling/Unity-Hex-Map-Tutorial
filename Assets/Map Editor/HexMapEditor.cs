@@ -23,6 +23,8 @@ public class HexMapEditor : MonoBehaviour
     HexDirection dragDirection;
     HexCell previousCell;
 
+    bool LMBPressed, RMBPressed, RMBClicked;
+
     private void Awake()
     {
         SelectColor(0);
@@ -75,6 +77,10 @@ public class HexMapEditor : MonoBehaviour
     {
         AdjustBrushSize();
 
+        LMBPressed = Input.GetMouseButton(0);
+        RMBPressed = Input.GetMouseButton(1);
+        RMBClicked = Input.GetMouseButtonDown(1);
+
         if (!EventSystem.current.IsPointerOverGameObject())
         {
             HandleInput();
@@ -96,7 +102,7 @@ public class HexMapEditor : MonoBehaviour
             if (centerCell)
             {
                 hexSelector.Select(affectedCells);
-                if (Input.GetMouseButton(0))
+                if (LMBPressed || RMBPressed)
                 {
                     if (previousCell && previousCell != centerCell)
                     {
@@ -212,15 +218,24 @@ public class HexMapEditor : MonoBehaviour
         {
             if (toolSelected == Tool.Brush)
             {
-                cell.Color = activeColor;
+                if (LMBPressed)
+                    cell.Color = activeColor;
             }
             if (toolSelected == Tool.Elevation)
             {
-                cell.Elevation = activeElevation;
+                if (LMBPressed)
+                    cell.Elevation = activeElevation;
             }
-            if (toolSelected == Tool.River && isDrag)
+            if (toolSelected == Tool.River)
             {
-                previousCell.SetOutgoingRiver(dragDirection);
+                if (isDrag && LMBPressed)
+                {
+                    previousCell.SetOutgoingRiver(dragDirection);
+                }
+                else if (RMBPressed)
+                {
+                    cell.RemoveRiver();
+                }
             }
         }
     }

@@ -177,7 +177,7 @@ public class HexCell : MonoBehaviour
         RefreshSelfOnly();
 
         HexCell neighbor = GetNeighbor(incomingRiver);
-        neighbor.hasIncomingRiver = false;
+        neighbor.hasOutgoingRiver = false;
         neighbor.RefreshSelfOnly();
     }
 

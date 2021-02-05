@@ -20,7 +20,7 @@ public class HexMapEditor : MonoBehaviour
     bool brushSizeEnabled = true;
 
     bool isDrag;
-    HexDirection dragDirection;
+    HexDirection dragDirection, prevDragDirection;
     HexCell previousCell;
 
     bool LMBPressed, RMBPressed, RMBClicked;
@@ -57,7 +57,7 @@ public class HexMapEditor : MonoBehaviour
     {
         toolSelected = Tool.River;
         hexSelector.BorderColor = Color.white;
-        brushSizeEnabled = false;
+        brushSizeEnabled = true;
         brushSize = 0;
     }
 
@@ -126,6 +126,7 @@ public class HexMapEditor : MonoBehaviour
 
     private void ValidateDrag(HexCell currentCell)
     {
+        prevDragDirection = dragDirection;
         for(dragDirection = HexDirection.NE; dragDirection <= HexDirection.NW; ++dragDirection)
         {
             if(previousCell.GetNeighbor(dragDirection) == currentCell)
@@ -228,7 +229,7 @@ public class HexMapEditor : MonoBehaviour
             }
             if (toolSelected == Tool.River)
             {
-                if (isDrag && LMBPressed)
+                if (isDrag && LMBPressed && dragDirection.Opposite() != prevDragDirection)
                 {
                     previousCell.SetOutgoingRiver(dragDirection);
                 }

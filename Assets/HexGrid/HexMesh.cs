@@ -135,6 +135,10 @@ public class HexMesh : MonoBehaviour
                     TriangulateWithRiver(direction, cell, center, e);
                 }
             }
+            else
+            {
+                TriangulateAdjacentToRiver(direction, center, cell, e);
+            }
         } else { 
             TriangulateEdgeFan(center, e, cell.Color);
         }
@@ -143,6 +147,33 @@ public class HexMesh : MonoBehaviour
         {
             TriangulateConnection(direction, cell, e);
         }
+    }
+
+    private void TriangulateAdjacentToRiver(HexDirection direction, Vector3 center, HexCell cell, EdgeVertices e)
+    {
+        if (cell.HasRiverThroughEdge(direction.Next()))
+        {
+            if (cell.HasRiverThroughEdge(direction.Previous()))
+            {
+                center += HexMetrics.GetSolidEdgeMiddle(direction) *
+                    (HexMetrics.innerToOuter * 0.5f);
+            }
+            else if (cell.HasRiverThroughEdge(direction.Previous2()))
+            {
+                center += HexMetrics.GetFirstSolidCorner(direction) * 0.25f;
+            }
+        }
+        else if (cell.HasRiverThroughEdge(direction.Previous()) && cell.HasRiverThroughEdge(direction.Next2()))
+        {
+            center += HexMetrics.GetSecondSolidCorner(direction) * 0.25f;
+        }
+        EdgeVertices m = new EdgeVertices(
+            Vector3.Lerp(center, e.v1, 0.5f),
+            Vector3.Lerp(center, e.v5, 0.5f)
+        );
+
+        TriangulateEdgeStrip(m, cell.Color, e, cell.Color);
+        TriangulateEdgeFan(center, m, cell.Color);
     }
 
     private void TriangulateWithRiverBeginOrEnd(HexDirection direction, HexCell cell, Vector3 center, EdgeVertices e)
@@ -162,10 +193,35 @@ public class HexMesh : MonoBehaviour
         {
             centerL = center + HexMetrics.GetFirstSolidCorner(direction.Previous()) * 0.25f;
             centerR = center + HexMetrics.GetSecondSolidCorner(direction.Next()) * 0.25f;
-        } else
+        }
+        else if (cell.HasRiverThroughEdge(direction.Next()))
+        {
+            centerL = center;
+            centerR = Vector3.Lerp(center, e.v5, 2f / 3f);
+        }
+        else if (cell.HasRiverThroughEdge(direction.Previous()))
+        {
+            centerL = Vector3.Lerp(center, e.v1, 2f / 3f);
+            centerR = center;
+        }
+        else if (cell.HasRiverThroughEdge(direction.Next2()))
+        {
+            centerL = center;
+            centerR = center + HexMetrics.GetSolidEdgeMiddle(direction.Next()) * 
+                (0.5f * HexMetrics.innerToOuter);
+        }
+        else if (cell.HasRiverThroughEdge(direction.Previous2()))
+        {
+            centerL = center + HexMetrics.GetSolidEdgeMiddle(direction.Previous()) *
+                (0.5f * HexMetrics.innerToOuter);
+            centerR = center;
+        }
+        else
         {
             centerL = centerR = center;
         }
+        center = Vector3.Lerp(centerL, centerR, 0.5f);
+
         EdgeVertices m = new EdgeVertices(
             Vector3.Lerp(centerL, e.v1, 0.5f),
             Vector3.Lerp(centerR, e.v5, 0.5f),

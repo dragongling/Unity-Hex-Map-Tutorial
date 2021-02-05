@@ -6,6 +6,9 @@ public enum HexEdgeType { Flat, Slope, Cliff }
 
 public static class HexMetrics
 {
+    public const float outerToInner = 0.866025404f;
+    public const float innerToOuter = 1f / outerToInner;
+
     public const float outerRadius = 10f;
     public const float innerRadius = outerRadius * 0.866025404f;
     public const float hexDiameter = innerRadius * 2f;
@@ -105,5 +108,12 @@ public static class HexMetrics
     public static Vector3 GetBridge(HexDirection direction)
     {
         return (corners[(int)direction] + corners[(int)direction + 1]) * blendFactor;
+    }
+
+    public static Vector3 GetSolidEdgeMiddle(HexDirection direction)
+    {
+        return
+            (corners[(int)direction] + corners[(int)direction + 1]) *
+            (0.5f * solidFactor);
     }
 }

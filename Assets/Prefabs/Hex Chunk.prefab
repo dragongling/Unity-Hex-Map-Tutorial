@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4144294308220990317}
   - component: {fileID: 4144294308220990316}
   m_Layer: 0
-  m_Name: Hex Mesh
+  m_Name: Terrain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -137,6 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e72e31e0df4e3e7489c6620265bf7399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  terrain: {fileID: 4144294308220990316}
 --- !u!1 &4144294308660197219
 GameObject:
   m_ObjectHideFlags: 0

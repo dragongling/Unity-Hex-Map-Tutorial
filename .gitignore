@@ -48,7 +48,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 # Github Plugin
-/Assets/Plugins/GitHub/
+/Assets/Plugins/*
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta

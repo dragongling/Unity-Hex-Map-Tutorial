@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class HexMapEditor : MonoBehaviour
 {
     public HexGrid hexGrid;
-    public Color[] colors;
-    private Color activeColor;
+    public TwoColorPanel colorPanel;
+    public Color primaryColor, secondaryColor;
+    public GameObject elevationPanel;
     private int activeElevation;
     private Tool toolSelected;
     int brushSize;
 
-    public GameObject selectionPlane;
     public HexSelector hexSelector;
 
     public enum Tool { Brush, Elevation, River }
@@ -23,12 +21,13 @@ public class HexMapEditor : MonoBehaviour
     HexDirection dragDirection, prevDragDirection;
     HexCell previousCell;
 
-    bool LMBPressed, RMBPressed, RMBClicked;
+    bool LMBPressed, RMBPressed, prevRMBPressed;
 
-    private void Awake()
+    private void Start()
     {
-        SelectColor(0);
-        toolSelected = Tool.Brush;        
+        colorPanel.PrimaryColorButton.Color = primaryColor;
+        colorPanel.SecondaryColorButton.Color = secondaryColor;
+        SelectBrushTool();
     }
 
     public void SetBrushSize(float newSize)
@@ -42,8 +41,10 @@ public class HexMapEditor : MonoBehaviour
     public void SelectBrushTool()
     {
         toolSelected = Tool.Brush;
-        hexSelector.BorderColor = activeColor;
+        hexSelector.BorderColor = primaryColor;
         brushSizeEnabled = true;
+        colorPanel.gameObject.SetActive(true);
+        elevationPanel.SetActive(false);
     }
 
     public void SelectElevationTool()
@@ -51,6 +52,8 @@ public class HexMapEditor : MonoBehaviour
         toolSelected = Tool.Elevation;
         hexSelector.BorderColor = Color.white;
         brushSizeEnabled = true;
+        colorPanel.gameObject.SetActive(false);
+        elevationPanel.SetActive(true);
     }
 
     public void SelectRiverTool()
@@ -59,13 +62,22 @@ public class HexMapEditor : MonoBehaviour
         hexSelector.BorderColor = Color.white;
         brushSizeEnabled = true;
         brushSize = 0;
+        colorPanel.gameObject.SetActive(false);
+        elevationPanel.SetActive(false);
     }
 
-    public void SelectColor(int index)
+    
+
+    public void SetPrimaryColor(Color newColor)
     {
-        activeColor = colors[index];
-        if(toolSelected == Tool.Brush)
-            hexSelector.BorderColor = activeColor;
+        primaryColor = newColor;
+        if (toolSelected == Tool.Brush)
+            hexSelector.BorderColor = primaryColor;
+    }
+
+    public void SetSecondaryColor(Color newColor)
+    {
+        secondaryColor = newColor;
     }
 
     public void SetElevation(float newElevation)
@@ -79,7 +91,6 @@ public class HexMapEditor : MonoBehaviour
 
         LMBPressed = Input.GetMouseButton(0);
         RMBPressed = Input.GetMouseButton(1);
-        RMBClicked = Input.GetMouseButtonDown(1);
 
         if (!EventSystem.current.IsPointerOverGameObject())
         {
@@ -101,6 +112,12 @@ public class HexMapEditor : MonoBehaviour
             List<HexCell> affectedCells = GetCellsAround(centerCell, brushSize);
             if (centerCell)
             {
+                if (toolSelected == Tool.Brush && (prevRMBPressed != RMBPressed))
+                {
+                    hexSelector.BorderColor = RMBPressed ? secondaryColor : primaryColor;
+                }
+                prevRMBPressed = RMBPressed;
+
                 hexSelector.Select(affectedCells);
                 if (LMBPressed || RMBPressed)
                 {
@@ -181,27 +198,6 @@ public class HexMapEditor : MonoBehaviour
         return result;
     }
 
-    void EditCells(HexCell center)
-    {
-        int centerX = center.coordinates.X;
-        int centerZ = center.coordinates.Z;
-
-        for(int r = 0, z = centerZ - brushSize; z <= centerZ; z++, r++)
-        {
-            for(int x = centerX - r; x <= centerX + brushSize; x++)
-            {
-                EditCell(hexGrid.GetCell(new HexCoordinates(x, z)));    
-            }
-        }
-        for (int r = 0, z = centerZ + brushSize; z > centerZ; z--, r++)
-        {
-            for (int x = centerX - brushSize; x <= centerX + r; x++)
-            {
-                EditCell(hexGrid.GetCell(new HexCoordinates(x, z)));
-            }
-        }
-    }
-
     public void ShowUI(bool visible)
     {
         hexGrid.ShowUI(visible);
@@ -220,7 +216,9 @@ public class HexMapEditor : MonoBehaviour
             if (toolSelected == Tool.Brush)
             {
                 if (LMBPressed)
-                    cell.Color = activeColor;
+                    cell.Color = primaryColor;
+                if (RMBPressed)
+                    cell.Color = secondaryColor;
             }
             if (toolSelected == Tool.Elevation)
             {

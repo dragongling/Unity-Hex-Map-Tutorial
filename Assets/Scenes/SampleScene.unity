@@ -2624,6 +2624,7 @@ MonoBehaviour:
   secondaryColor: {r: 0.18823531, g: 0.5647059, b: 0.15294118, a: 1}
   elevationPanel: {fileID: 1833213033}
   hexSelector: {fileID: 1285524059}
+  cellEditDelay: 0.2
 --- !u!114 &1285524056
 MonoBehaviour:
   m_ObjectHideFlags: 0

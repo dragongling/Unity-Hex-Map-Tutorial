@@ -9,6 +9,9 @@ public class HexGrid : MonoBehaviour
     private int cellCountX;
     private int cellCountZ;
 
+    public int CellCountX { get { return cellCountX; } }
+    public int CellCountZ { get { return cellCountZ; } }
+
     public int chunkCountX = 4;
     public int chunkCountZ = 3;
 
@@ -79,19 +82,53 @@ public class HexGrid : MonoBehaviour
         }
     }
 
-    internal HexCell GetCell(HexCoordinates coordinates)
+    public HexCell GetCell(HexCoordinates coordinates)
     {
-        int z = coordinates.Z;
+        return GetCell(coordinates.X, coordinates.Z);
+    }
+
+    public HexCell GetCell(int x, int z)
+    {
         if (z < 0 || z >= cellCountZ)
         {
             return null;
         }
-        int x = coordinates.X + z / 2;
+        x += z / 2;
         if (x < 0 || x >= cellCountX)
         {
             return null;
         }
         return cells[x + z * cellCountX];
+    }
+
+    public List<HexCell> GetCellsAround(HexCell center, int radius)
+    {
+        return GetCellsAround(center.coordinates.X, center.coordinates.Z, radius);
+    }
+
+    public List<HexCell> GetCellsAround(int centerX, int centerZ, int radius)
+    {
+        List<HexCell> result = new List<HexCell> { GetCell(centerX, centerZ) };
+
+        for (int r = 0, z = centerZ - radius; z <= centerZ; z++, r++)
+        {
+            for (int x = centerX - r; x <= centerX + radius; x++)
+            {
+                HexCell cell = GetCell(x, z);
+                if (cell)
+                    result.Add(cell);
+            }
+        }
+        for (int r = 0, z = centerZ + radius; z > centerZ; z--, r++)
+        {
+            for (int x = centerX - radius; x <= centerX + r; x++)
+            {
+                HexCell cell = GetCell(x, z);
+                if (cell)
+                    result.Add(cell);
+            }
+        }
+        return result;
     }
 
     private void CreateCells()
@@ -118,7 +155,7 @@ public class HexGrid : MonoBehaviour
         position.y = 0f;
         position.z = z * (HexMetrics.outerRadius * 1.5f);
 
-        HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefab);
+        HexCell cell = cells[i] = Instantiate(cellPrefab);
         //cell.transform.SetParent(transform, false);
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);

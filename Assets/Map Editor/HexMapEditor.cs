@@ -21,10 +21,13 @@ public class HexMapEditor : MonoBehaviour
     HexDirection dragDirection, prevDragDirection;
     HexCell previousCell;
 
-    bool LMBPressed, RMBPressed, prevRMBPressed;
+    bool LMBPressed, RMBPressed, prevLMBPressed, prevRMBPressed;
+
+    private HexContainer<bool> cellElevationEdited;
 
     private void Start()
     {
+        cellElevationEdited = new HexContainer<bool>(hexGrid.CellCountX, hexGrid.CellCountZ);
         colorPanel.PrimaryColorButton.Color = primaryColor;
         colorPanel.SecondaryColorButton.Color = secondaryColor;
         SelectBrushTool();
@@ -101,6 +104,9 @@ public class HexMapEditor : MonoBehaviour
             previousCell = null;
             hexSelector.ClearSelection();
         }
+
+        prevRMBPressed = RMBPressed;
+        prevLMBPressed = LMBPressed;
     }
 
     private void HandleInput()
@@ -109,14 +115,15 @@ public class HexMapEditor : MonoBehaviour
         if (Physics.Raycast(inputRay, out RaycastHit hit))
         {
             HexCell centerCell = hexGrid.GetCell(hit.point);
-            List<HexCell> affectedCells = GetCellsAround(centerCell, brushSize);
+            List<HexCell> affectedCells = hexGrid.GetCellsAround(centerCell, brushSize);
             if (centerCell)
             {
                 if (toolSelected == Tool.Brush && (prevRMBPressed != RMBPressed))
                 {
                     hexSelector.BorderColor = RMBPressed ? secondaryColor : primaryColor;
                 }
-                prevRMBPressed = RMBPressed;
+                if (toolSelected == Tool.Elevation && (!LMBPressed && prevLMBPressed) || (!RMBPressed && prevRMBPressed))
+                    cellElevationEdited.Clear(sizeof(bool));
 
                 hexSelector.Select(affectedCells);
                 if (LMBPressed || RMBPressed)
@@ -131,7 +138,7 @@ public class HexMapEditor : MonoBehaviour
                     }
                     EditCells(affectedCells);
                     previousCell = centerCell;
-                }
+                }                
             }
             else
             {
@@ -171,33 +178,6 @@ public class HexMapEditor : MonoBehaviour
         }
     }
 
-    List<HexCell> GetCellsAround(HexCell center, int radius)
-    {
-        List<HexCell> result = new List<HexCell> { center };
-        int centerX = center.coordinates.X;
-        int centerZ = center.coordinates.Z;
-
-        for (int r = 0, z = centerZ - radius; z <= centerZ; z++, r++)
-        {
-            for (int x = centerX - r; x <= centerX + radius; x++)
-            {
-                HexCell cell = hexGrid.GetCell(new HexCoordinates(x, z));
-                if(cell)
-                    result.Add(cell);
-            }
-        }
-        for (int r = 0, z = centerZ + radius; z > centerZ; z--, r++)
-        {
-            for (int x = centerX - radius; x <= centerX + r; x++)
-            {
-                HexCell cell = hexGrid.GetCell(new HexCoordinates(x, z));
-                if (cell)
-                    result.Add(cell);
-            }
-        }
-        return result;
-    }
-
     public void ShowUI(bool visible)
     {
         hexGrid.ShowUI(visible);
@@ -222,8 +202,18 @@ public class HexMapEditor : MonoBehaviour
             }
             if (toolSelected == Tool.Elevation)
             {
+                if (cellElevationEdited[cell.coordinates])
+                    return;
                 if (LMBPressed)
-                    cell.Elevation = activeElevation;
+                {
+                    cell.Elevation += 1;
+                    cellElevationEdited[cell.coordinates] = true;
+                }
+                if (RMBPressed && cell.Elevation > 0)
+                {
+                    cell.Elevation -= 1;
+                    cellElevationEdited[cell.coordinates] = true;
+                }
             }
             if (toolSelected == Tool.River)
             {

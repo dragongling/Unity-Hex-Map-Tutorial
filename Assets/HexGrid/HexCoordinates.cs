@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 [System.Serializable]
-public struct HexCoordinates
+public struct HexCoordinates : IEquatable<HexCoordinates>
 {
     [SerializeField]
     private int x, z;
@@ -66,5 +67,20 @@ public struct HexCoordinates
     public string ToStringOnSeparateLines()
     {
         return X.ToString() + "\n" + Y.ToString() + "\n" + Z.ToString();
+    }
+
+    public override bool Equals(object obj)
+    {
+        return Equals(obj as HexCoordinates?);
+    }
+
+    public bool Equals(HexCoordinates otherCoords)
+    {
+        return x == otherCoords.x && z == otherCoords.z;
+    }
+
+    public override int GetHashCode()
+    {
+        return x ^ z;
     }
 }

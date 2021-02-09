@@ -35,7 +35,7 @@ public static class HexMetrics
 
     public const float selectionHeight = 1f;
 
-    public const float streamBedElevationOffset = -1f;
+    public const float streamBedElevationOffset = -1.75f;
 
     public const float riverSurfaceElevationOffset = -0.5f;
 

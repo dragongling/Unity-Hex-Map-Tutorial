@@ -3049,6 +3049,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97e4b21f23c61704ebeb17432a263f60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useCollider: 1
+  useColors: 1
 --- !u!23 &1454044235
 MeshRenderer:
   m_ObjectHideFlags: 0

@@ -14,7 +14,9 @@ public class HexMapEditor : MonoBehaviour
 
     public HexSelector hexSelector;
 
-    public enum Tool { Brush, Elevation, River }
+    public enum Tool { Brush, Elevation, River,
+        Road
+    }
     bool brushSizeEnabled = true;
 
     bool isDrag;
@@ -71,7 +73,15 @@ public class HexMapEditor : MonoBehaviour
         elevationPanel.SetActive(false);
     }
 
-    
+    public void SelectRoadTool()
+    {
+        toolSelected = Tool.Road;
+        hexSelector.BorderColor = Color.white;
+        brushSizeEnabled = true;
+        brushSize = 0;
+        colorPanel.gameObject.SetActive(false);
+        elevationPanel.SetActive(false);
+    }
 
     public void SetPrimaryColor(Color newColor)
     {
@@ -235,6 +245,17 @@ public class HexMapEditor : MonoBehaviour
                 else if (RMBPressed)
                 {
                     cell.RemoveRiver();
+                }
+            }
+            if (toolSelected == Tool.Road)
+            {
+                if (isDrag && LMBPressed && dragDirection.Opposite() != prevDragDirection)
+                {
+                    previousCell.AddRoad(dragDirection);
+                }
+                else if (RMBPressed)
+                {
+                    cell.RemoveRoads();
                 }
             }
         }

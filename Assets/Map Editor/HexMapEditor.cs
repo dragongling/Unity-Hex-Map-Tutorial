@@ -24,6 +24,8 @@ public class HexMapEditor : MonoBehaviour
     bool LMBPressed, RMBPressed, prevLMBPressed, prevRMBPressed;
 
     private HexContainer<bool> cellElevationEdited;
+    private bool elevationChangeStarted = false;
+    private int elevationToChange;
 
     private void Start()
     {
@@ -123,7 +125,10 @@ public class HexMapEditor : MonoBehaviour
                     hexSelector.BorderColor = RMBPressed ? secondaryColor : primaryColor;
                 }
                 if (toolSelected == Tool.Elevation && (!LMBPressed && prevLMBPressed) || (!RMBPressed && prevRMBPressed))
+                {
                     cellElevationEdited.Clear(sizeof(bool));
+                    elevationChangeStarted = false;
+                }
 
                 hexSelector.Select(affectedCells);
                 if (LMBPressed || RMBPressed)
@@ -204,15 +209,21 @@ public class HexMapEditor : MonoBehaviour
             {
                 if (cellElevationEdited[cell.coordinates])
                     return;
+                if (elevationChangeStarted && cell.Elevation != elevationToChange)
+                    return;
                 if (LMBPressed)
                 {
+                    elevationToChange = cell.Elevation;
                     cell.Elevation += 1;
-                    cellElevationEdited[cell.coordinates] = true;
+                    cellElevationEdited[cell.coordinates] = true;                    
+                    elevationChangeStarted = true;
                 }
                 if (RMBPressed && cell.Elevation > 0)
                 {
+                    elevationToChange = cell.Elevation;
                     cell.Elevation -= 1;
                     cellElevationEdited[cell.coordinates] = true;
+                    elevationChangeStarted = true;
                 }
             }
             if (toolSelected == Tool.River)

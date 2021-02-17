@@ -14,9 +14,7 @@ public class HexMapEditor : MonoBehaviour
 
     public HexSelector hexSelector;
 
-    public enum Tool { Brush, Elevation, River,
-        Road
-    }
+    public enum Tool { Brush, Elevation, River, Road }
     bool brushSizeEnabled = true;
 
     bool isDrag;
